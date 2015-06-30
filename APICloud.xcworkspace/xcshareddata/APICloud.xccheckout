@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>64D545D9-4A78-434A-A243-5524DAC3DE55</string>
+	<key>IDESourceControlProjectName</key>
+	<string>APICloud</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>60C6143EE7D98799778939E899828E8FD9636A40</key>
+		<string>https://github.com/rongcloud/apicloud-module-imlib-ios</string>
+		<key>65EDA6E5F8A5C4B90B13FA0B677C55CEA839F360</key>
+		<string>gitlab.rongcloud.net:ios-team/ios-apicloud-imlib-module.git</string>
+		<key>7AF2CC6D17829D9B9E0044C5E81E9275A86C81AE</key>
+		<string>gitlab.rongcloud.net:ios-team/ios-imlib.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>APICloud.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>60C6143EE7D98799778939E899828E8FD9636A40</key>
+		<string>..</string>
+		<key>65EDA6E5F8A5C4B90B13FA0B677C55CEA839F360</key>
+		<string>../../ios-apicloud-imlib-module</string>
+		<key>7AF2CC6D17829D9B9E0044C5E81E9275A86C81AE</key>
+		<string>../../ios-apicloud-imlib-moduleapp/ios-imlib</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/rongcloud/apicloud-module-imlib-ios</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>60C6143EE7D98799778939E899828E8FD9636A40</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>60C6143EE7D98799778939E899828E8FD9636A40</string>
+			<key>IDESourceControlWCCName</key>
+			<string>apicloud-module-imlib-ios</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>65EDA6E5F8A5C4B90B13FA0B677C55CEA839F360</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ios-apicloud-imlib-module</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7AF2CC6D17829D9B9E0044C5E81E9275A86C81AE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ios-imlib</string>
+		</dict>
+	</array>
+</dict>
+</plist>
