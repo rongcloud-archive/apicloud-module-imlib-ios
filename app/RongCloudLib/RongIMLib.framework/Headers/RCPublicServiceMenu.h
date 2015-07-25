@@ -34,7 +34,7 @@
 @property(nonatomic, strong) NSArray *menuItems;
 /**
  * 根据JSON 字典初始化Menu
- * @param  data    存储菜单属性的字典
+ * @param  jsonDictionary    存储菜单属性的字典
  */
 - (void)decodeWithJsonDictionaryArray:(NSArray *)jsonDictionary;
 @end

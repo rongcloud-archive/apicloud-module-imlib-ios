@@ -104,9 +104,7 @@ static BOOL isConnected = NO;
             return;
         }
         
-        NSString *_deviceTokenCache = [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceToken];
-        
-        [[RCIMClient sharedRCIMClient] init:appKey deviceToken:_deviceTokenCache];
+        [[RCIMClient sharedRCIMClient] init:appKey];
         
         isInited = YES;
         
@@ -160,33 +158,33 @@ static BOOL isConnected = NO;
                 [self sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:nil doDelete:YES];
             }
         } error:^(RCConnectErrorCode status) {
-            NSLog(@"%s, errorCode> %ld", __FUNCTION__, status);
+            NSLog(@"%s, errorCode> %ld", __FUNCTION__, (long)status);
             
             NSDictionary *paramDict = self.connectDic;
             
             NSNumber *cbId = [paramDict objectForKey:@"cbId"];
             if (cbId) {
                 
-                isConnected           = NO;
+                isConnected           = YES;
                 NSDictionary *_result = @{@"status": ERROR};
                 NSDictionary *_err    = @{@"code":@(status), @"msg": @""};
                 
                 [self sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
             }
         } tokenIncorrect:^{
-//            NSLog(@"%s, tokenIncorrect", __FUNCTION__);
-//            
-//            NSDictionary *paramDict = self.connectDic;
-//            
-//            NSNumber *cbId = [paramDict objectForKey:@"cbId"];
-//            if (cbId) {
-//                
-//                isConnected           = NO;
-//                NSDictionary *_result = @{@"status": ERROR};
-//                NSDictionary *_err    = @{@"code":@(errorCode), @"msg": @""};
-//                
-//                [self sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
-//            }
+            NSLog(@"%s, errorCode> %d", __FUNCTION__, 31004);
+            
+            NSDictionary *paramDict = self.connectDic;
+            
+            NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+            if (cbId) {
+                
+                isConnected           = YES;
+                NSDictionary *_result = @{@"status": ERROR};
+                NSDictionary *_err    = @{@"code":@(31004), @"msg": @""};
+                
+                [self sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
+            }
         }];
     }
 }
@@ -227,21 +225,12 @@ static BOOL isConnected = NO;
         if (![self checkIsInitOrConnect:cbId doDelete:YES]) {
             return;
         }
-        __weak typeof(&*self) blockSelf = self;
-        [[RCIMClient sharedRCIMClient]reconnect:^(NSString *userId) {
-            //success
-            isConnected = YES;
-            NSDictionary *_result   =   @{@"status": SUCCESS, @"result": @{@"userId":userId}};
-            
-            [blockSelf sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:nil doDelete:YES];
-        } error:^(RCConnectErrorCode status) {
             //error
-            isConnected           = NO;
             NSDictionary *_result = @{@"status": ERROR};
-            NSDictionary *_err    = @{@"code":@(status), @"msg": @""};
+            NSDictionary *_err    = @{@"code":@(0), @"msg": @"不要调用这个函数了，我们会自动做好连接工作～～"};
             
-            [blockSelf sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
-        }];
+            [self sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
+
     }
 }
 
@@ -316,8 +305,10 @@ static BOOL isConnected = NO;
                                                              content:messageContent
                                                          pushContent:pushContent
      success:^(long messageId) {
+         NSLog(@"success");
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
          NSLog(@"%s", __FUNCTION__);
-         
+            NSLog(@"callback success");
          NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
          
          [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
@@ -326,22 +317,23 @@ static BOOL isConnected = NO;
          
          NSDictionary *_result = @{@"status":SUCCESS, @"result":@{@"message":@{@"messageId":@(messageId)}}};
          [blockSelf sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:nil doDelete:YES];
+        });
      }
        error:^(RCErrorCode nErrorCode, long messageId) {
-           
-           NSLog(@"%s", __FUNCTION__);
-           NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-           
-           [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
-           
-           [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isSuccess"];
-           
-           NSDictionary *_result = @{@"status":ERROR, @"result":@{@"message": @{@"messageId":@(messageId)}}};
-           NSDictionary *_err = @{@"code": @(nErrorCode), @"msg": @""};
-           [blockSelf sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
-
+           dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+               NSLog(@"%s", __FUNCTION__);
+               NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+               
+               [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
+               
+               [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isSuccess"];
+               
+               NSDictionary *_result = @{@"status":ERROR, @"result":@{@"message": @{@"messageId":@(messageId)}}};
+               NSDictionary *_err = @{@"code": @(nErrorCode), @"msg": @""};
+               [blockSelf sendResultEventWithCallbackId:[cbId intValue] dataDict:_result errDict:_err doDelete:YES];
+           });
        }];
-    
+    NSLog(@"perpare");
     NSDictionary *_message = [RongCloudModel RCGenerateMessageModel:rcMessage];
     NSDictionary *_result = @{@"status":PREPARE, @"result": @{@"message":_message}};
     
@@ -367,7 +359,9 @@ static BOOL isConnected = NO;
         NSString *_content                 = [paramDict objectForKey:@"text"];
         NSString *_extra                   = [paramDict objectForKey:@"extra"];
         //NSString *_pushContent             = [paramDict objectForKey:@"pushContent"];
-
+        if (!_extra) {
+            _extra = @"";
+        }
         if (![_conversationTypeString isKindOfClass:[NSString class]] ||
             ![_targetId isKindOfClass:[NSString class]] ||
             ![_content isKindOfClass:[NSString class]] ||
@@ -404,7 +398,9 @@ static BOOL isConnected = NO;
         NSString *_targetId                = [paramDict objectForKey:@"targetId"];
         NSString *_imagepath               = [paramDict objectForKey:@"imagePath"];
         NSString *_extra                   = [paramDict objectForKey:@"extra"];
-        
+        if (!_extra) {
+            _extra = @"";
+        }
         if (![_conversationTypeString isKindOfClass:[NSString class]] ||
             ![_targetId isKindOfClass:[NSString class]] ||
             ![_imagepath isKindOfClass:[NSString class]] ||
@@ -509,7 +505,9 @@ static BOOL isConnected = NO;
         NSString *_voicePath               = [paramDict objectForKey:@"voicePath"];
         NSNumber *_duration                = [paramDict objectForKey:@"duration"];
         NSString *_extra                   = [paramDict objectForKey:@"extra"];
-
+        if (!_extra) {
+            _extra = @"";
+        }
         if (![_conversationTypeString isKindOfClass:[NSString class]] ||
             ![_targetId isKindOfClass:[NSString class]] ||
             ![_voicePath isKindOfClass:[NSString class]] ||
@@ -562,7 +560,9 @@ static BOOL isConnected = NO;
         NSString *_locationName            = [paramDict objectForKey:@"poi"];
         NSString *_imagePath               = [paramDict objectForKey:@"imagePath"];
         NSString *_extra                   = [paramDict objectForKey:@"extra"];
-        
+        if (!_extra) {
+            _extra = @"";
+        }
         if (![_conversationTypeString isKindOfClass:[NSString class]] ||
             ![_targetId isKindOfClass:[NSString class]] ||
             ![_latitude isKindOfClass:[NSNumber class]] ||
@@ -612,7 +612,9 @@ static BOOL isConnected = NO;
         NSString *_content                 = [paramDict objectForKey:@"description"];
         NSString *_imageUrl                = [paramDict objectForKey:@"imageUrl" ];
         NSString *_extra                   = [paramDict objectForKey:@"extra"];
-
+        if (!_extra) {
+            _extra = @"";
+        }
         if (![_conversationTypeString isKindOfClass:[NSString class]] ||
             ![_targetId isKindOfClass:[NSString class]] ||
             ![_tiltle isKindOfClass:[NSString class]] ||

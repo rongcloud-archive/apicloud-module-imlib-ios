@@ -74,6 +74,13 @@
  */
 @property(nonatomic, strong) RCUserInfo *senderUserInfo;
 
+/**
+ *  decode用户信息
+ *
+ *  @param dictionary  用户信息字典
+ */
+-(void)decodeUserInfo:(NSDictionary *)dictionary;
+
 /** 原始JSON数据，如果encode和decode失败，此基类会将服务器返回的JSON存到此字段
  */
 @property(nonatomic, strong, setter=setRawJSONData:) NSData *rawJSONData;

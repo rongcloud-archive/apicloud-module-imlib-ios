@@ -130,9 +130,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  * 在整个应用程序全局，只需要调用一次 init 方法。传入您从开发者平台申请的 appKey 即可。
  *
  * @param appKey      从开发者平台申请的应用 appKey。
- * @param deviceToken 用于 APNS 的设备唯一标识。该参数已经弃用，请用 setDeviceToken 方法传入 deviceToken。
  */
-- (void)init:(NSString *)appKey deviceToken:(NSString *)deviceToken;
+- (void)init:(NSString *)appKey;
 
 /**
  * 注册消息类型。
@@ -144,7 +143,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 - (void)registerMessageType:(Class)messageClass;
 
 /**
- * 设置 DeviceToken，用于 APNS 的设备唯一标识。请在调用 connectWithToken 之前调用该方法。
+ * 设置 DeviceToken，用于 APNS 的设备唯一标识。请在获取到Device Token之后立即调用该方法。
  * @param deviceToken 从苹果服务器获取的设备唯一标识
  */
 - (void)setDeviceToken:(NSString *)deviceToken;
@@ -162,14 +161,16 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                  success:(void (^)(NSString *userId))successBlock
                    error:(void (^)(RCConnectErrorCode status))errorBlock
           tokenIncorrect:(void (^)())tokenIncorrectBlock ;
-/**
- *  重新连接服务器。
- *  将重用您的 Token 进行重连，请注意当 Token 错误或过期失效时您需要重新获取 Token。
- *
- *  @param successBlock 重连成功回调
- *  @param errorBlock   重连失败回调
- */
-- (void)reconnect:(void (^)(NSString *userId))successBlock error:(void (^)(RCConnectErrorCode status))errorBlock;
+
+//从2.2.3版本之后，所有的重连操作都由lib库自动处理，上层不需要干预。
+///**
+// *  重新连接服务器。
+// *  将重用您的 Token 进行重连，请注意当 Token 错误或过期失效时您需要重新获取 Token。
+// *
+// *  @param successBlock 重连成功回调
+// *  @param errorBlock   重连失败回调
+// */
+//- (void)reconnect:(void (^)(NSString *userId))successBlock error:(void (^)(RCConnectErrorCode status))errorBlock;
 
 /**
  *  断开连接。
@@ -206,6 +207,22 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 - (void)setRCConnectionStatusChangeDelegate:(id<RCConnectionStatusChangeDelegate>)delegate;
 
 /**
+ *  发送状态消息。可以发送任何类型的消息。但建议您发送自定义的消息类型
+ *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
+ *  @param conversationType 会话类型。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content          消息内容。
+ *  @param successBlock     调用完成的处理。
+ *  @param errorBlock       调用返回的错误信息。
+ *
+ *  @return 发送的状态消息实体。
+ */
+- (RCMessage *)sendStatusMessage:(RCConversationType)conversationType
+                        targetId:(NSString *)targetId
+                         content:(RCMessageContent *)content
+                         success:(void (^)(long messageId))successBlock
+                           error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
+/**
  *  发送消息。可以发送任何类型的消息。
  *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
  *  @param conversationType 会话类型。
@@ -224,6 +241,26 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                    success:(void (^)(long messageId))successBlock
                      error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
 
+/**
+ *  发送消息。可以发送任何类型的消息。
+ *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
+ *  @param conversationType 会话类型。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content          消息内容。
+ *  @param pushContent      推送消息内容
+ *  @param pushData         推送消息附加信息
+ *  @param successBlock     调用完成的处理。
+ *  @param errorBlock       调用返回的错误信息。
+ *
+ *  @return 发送的消息实体。
+ */
+- (RCMessage *)sendMessage:(RCConversationType)conversationType
+                  targetId:(NSString *)targetId
+                   content:(RCMessageContent *)content
+               pushContent:(NSString *)pushContent
+                  pushData:(NSString *)pushData
+                   success:(void (^)(long messageId))successBlock
+                     error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
 /**
  *  发送图片消息，上传图片并且发送，使用该方法，默认原图会上传到融云的服务，并且发送消息,如果使用普通的sendMessage方法，
  *  需要自己实现上传图片，并且添加ImageMessage的URL之后发送
@@ -246,6 +283,29 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                          success:(void (^)(long messageId))successBlock
                           error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 
+/**
+ *  发送图片消息，上传图片并且发送，使用该方法，默认原图会上传到融云的服务，并且发送消息,如果使用普通的sendMessage方法，
+ *  需要自己实现上传图片，并且添加ImageMessage的URL之后发送
+ *
+ *  @param conversationType 会话类型。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content          消息内容
+ *  @param pushContent      推送消息内容
+ *  @param pushData         推送消息附加信息
+ *  @param progressBlock    进度块
+ *  @param successBlock     成功处理块
+ *  @param errorBlock       失败处理块
+ *
+ *  @return 发送的消息实体。
+ */
+- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
+                       targetId:(NSString *)targetId
+                        content:(RCMessageContent *)content
+                    pushContent:(NSString *)pushContent
+                       pushData:(NSString *)pushData
+                       progress:(void (^)(int progress, long messageId))progressBlock
+                        success:(void (^)(long messageId))successBlock
+                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 /**
  *  下载图片
  *
@@ -374,6 +434,22 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                 oldestMessageId:(long)oldestMessageId
                           count:(int)count;
 
+/**
+ *  插入一条消息。
+ *
+ *  @param conversationType 会话类型。不支持传入 RCConversationType.CHATROOM。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id。
+ *  @param senderUserId     消息的发送者，如果为空则为当前用户。
+ *  @param sendStatus       要插入的消息状态。
+ *  @param content          消息内容
+ *
+ *  @return 插入的消息实体。
+ */
+- (RCMessage *)insertMessage:(RCConversationType)conversationType
+                    targetId:(NSString *)targetId
+                senderUserId:(NSString *)senderUserId
+                  sendStatus:(RCSentStatus)sendStatus
+                     content:(RCMessageContent *)content;
 /**
  *  删除指定的一条或者一组消息。
  *
@@ -619,7 +695,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  加入聊天室。
  *
  *  @param targetId         聊天室ID。
- *  @param messageCount     进入聊天室获取获取多少条历史信息。
+ *  @param messageCount     进入聊天室获取获取多少条历史信息
+                            -1表示不获取，0表示系统默认数目(现在默认值为10条)，正数表示获取的具体数目，最大值为50
  *  @param successBlock     调用完成的处理。
  *  @param errorBlock       调用返回的错误信息。
  */
@@ -799,6 +876,11 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 - (void)syncUserData:(RCUserData *)userData
    success:(void (^)())successBlock
      error:(void (^)(RCErrorCode status))errorBlock;
-
+/**
+ *  查询当前连接状态
+ *
+ *  @return 连接状态
+ */
+- (RCConnectionStatus)getConnectionStatus;
 @end
 #endif
