@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  UZEngine
+
+  Created by kenny on 14-3-27.
+  Copyright (c) 2014年 APICloud. All rights reserved.
+*/
+"Cancel" = "Cancel";
+"Done" = "Done";
+"Confirm" = "Confirm";
+"OK" = "OK";
+"Exit" = "Exit";
+"Close" = "Close";
+"Pull down to refresh..." = "Pull down to refresh...";
+"Release to refresh..." = "Release to refresh...";
+"Loading..." = "Loading...";
+"Latest update" = "Latest update";
+"Loading" = "Loading";
+"Please wait..." = "Please wait...";
+"Confirm to exit?" = "Confirm to exit?";
+"Security certification..." = "Security certification...";

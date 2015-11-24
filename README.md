@@ -1,2 +1,2 @@
 # apicloud-module-imlib-ios
-RongCloud IMLib APICloud Module for iOS.
+RongCloud IMLib2 APICloud Module for iOS.

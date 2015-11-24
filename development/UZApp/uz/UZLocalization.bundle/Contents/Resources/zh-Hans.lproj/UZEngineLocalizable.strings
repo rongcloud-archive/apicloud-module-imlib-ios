@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  UZEngine
+
+  Created by kenny on 14-3-27.
+  Copyright (c) 2014年 APICloud. All rights reserved.
+*/
+"Cancel" = "取消";
+"Done" = "完成";
+"Confirm" = "确定";
+"OK" = "好";
+"Exit" = "退出";
+"Close" = "关闭";
+"Pull down to refresh..." = "下拉可以刷新...";
+"Release to refresh..." = "松开可以刷新...";
+"Loading..." = "加载中...";
+"Latest update" = "最后更新";
+"Loading" = "加载中";
+"Please wait..." = "请稍候...";
+"Confirm to exit?" = "是否退出应用?";
+"Security certification..." = "正在安全认证...";
