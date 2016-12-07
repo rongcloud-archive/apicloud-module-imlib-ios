@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Connection</key>
+	<key>File</key>
 	<dict>
-		<key>ForceKeepAlive</key>
-		<false/>
+		<key>RelativePath</key>
+		<string>Documents/MyFile</string>
 	</dict>
 	<key>Voice</key>
 	<dict>
@@ -20,6 +20,11 @@
 		<integer>960</integer>
 		<key>ImageHeight</key>
 		<integer>960</integer>
+	</dict>
+	<key>CustomerService</key>
+	<dict>
+		<key>SuspendWhenLeave</key>
+		<true/>
 	</dict>
 </dict>
 </plist>

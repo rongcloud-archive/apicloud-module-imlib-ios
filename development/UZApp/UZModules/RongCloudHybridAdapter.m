@@ -12,6 +12,12 @@
 #import "RongCloudApplicationHandler.h"
 #import <objc/runtime.h>
 
+#ifdef RC_SUPPORT_IMKIT
+#import <RongIMKit/RongIMKit.h>
+#import <RongCallKit/RongCallKit.h>
+#import "RCDCustomerServiceViewController.h"
+#endif
+
 #define BAD_PARAMETER_CODE -10002
 #define BAD_PARAMETER_MSG @"Argument Exception"
 
@@ -31,6 +37,10 @@ static BOOL isConnected = NO;
 
 @property (nonatomic, strong) id connectionCallbackId;
 @property (nonatomic,strong) id receiveMessageCbId;
+#ifdef RC_SUPPORT_IMKIT
+@property (nonatomic, strong) id refreshUserInfoCallbackId;
+#endif
+@property (nonatomic, assign)BOOL disableLocalNotification;
 
 @property (nonatomic, weak)id<RongCloud2HybridDelegation> commandDelegate;
 @end
@@ -42,6 +52,7 @@ static BOOL isConnected = NO;
     self = [super init];
     if (self) {
         self.commandDelegate = commandDelegate;
+        self.disableLocalNotification = NO;
     }
     return self;
 }
@@ -62,9 +73,13 @@ static BOOL isConnected = NO;
         
         return;
     }
-        
-    [[RCIMClient sharedRCIMClient] init:appKey];
-        
+    
+#ifdef RC_SUPPORT_IMKIT
+  [[RCIM sharedRCIM] initWithAppKey:appKey];
+  [RCIM sharedRCIM].enablePersistentUserInfoCache = YES;
+#else
+  [[RCIMClient sharedRCIMClient] initWithAppKey:appKey];
+#endif
     isInited = YES;
         
     NSDictionary *_result = @{@"status":SUCCESS};
@@ -95,15 +110,16 @@ static BOOL isConnected = NO;
         return;
     }
 
-    
-    [[RCIMClient sharedRCIMClient]connectWithToken:token success:^(NSString *userId) {
+    void (^successBlock)(NSString *userId) = ^(NSString *userId){
         NSLog(@"%s", __FUNCTION__);
         isConnected           = YES;
         NSDictionary *_result = @{@"status": SUCCESS, @"result": @{@"userId":userId}};
-
+        
         [self.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:YES];
-
-    } error:^(RCConnectErrorCode status) {
+        
+    };
+    
+    void (^errorBlock)(RCConnectErrorCode status) = ^(RCConnectErrorCode status) {
         NSLog(@"%s, errorCode> %ld", __FUNCTION__, (long)status);
         
         isConnected           = YES;
@@ -111,15 +127,23 @@ static BOOL isConnected = NO;
         NSDictionary *_err    = @{@"code":@(status), @"msg": @""};
         
         [self.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
-    } tokenIncorrect:^{
+    };
+    
+    void (^tokenIncorrectBlock)() = ^{
         NSLog(@"%s, errorCode> %d", __FUNCTION__, 31004);
-
+        
         isConnected           = YES;
         NSDictionary *_result = @{@"status": ERROR};
         NSDictionary *_err    = @{@"code":@(31004), @"msg": @""};
         
         [self.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
-    }];
+    };
+    
+#ifdef RC_SUPPORT_IMKIT
+    [[RCIM sharedRCIM] connectWithToken:token success:successBlock error:errorBlock tokenIncorrect:tokenIncorrectBlock];
+#else
+    [[RCIMClient sharedRCIMClient] connectWithToken:token success:successBlock error:errorBlock tokenIncorrect:tokenIncorrectBlock];
+#endif
 }
 
 
@@ -181,20 +205,20 @@ static BOOL isConnected = NO;
         [self.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
         return;
     }
-    
+  
+  BOOL receivePush = YES;
     if (isReceivePush) {
-        
-        if (1 == isReceivePush.integerValue) {
-            [[RCIMClient sharedRCIMClient]disconnect:YES];
-        }
-        else{
-            [[RCIMClient sharedRCIMClient]disconnect:NO];
+        if (1 != isReceivePush.integerValue) {
+          receivePush = NO;
         }
     }
-    else{
-        [[RCIMClient sharedRCIMClient]disconnect:YES];
-    }
-    
+  
+#ifdef RC_SUPPORT_IMKIT
+  [[RCIM sharedRCIM] disconnect:receivePush];
+#else
+  [[RCIMClient sharedRCIMClient] disconnect:receivePush];
+#endif
+  
     isConnected           = NO;
     NSDictionary *_result = @{@"status": SUCCESS};
     [self.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:YES];
@@ -205,10 +229,42 @@ static BOOL isConnected = NO;
 {
     NSLog(@"%s", __FUNCTION__);
     self.connectionCallbackId = connectionCallbackId;
-    [[RCIMClient sharedRCIMClient]setRCConnectionStatusChangeDelegate:self];
+
+#ifdef RC_SUPPORT_IMKIT
+  [[RCIM sharedRCIM] setConnectionStatusDelegate:self];
+#else
+    [[RCIMClient sharedRCIMClient] setRCConnectionStatusChangeDelegate:self];
+#endif
+
 }
 
+#ifdef RC_SUPPORT_IMKIT
+- (void)refreshUserInfo:(RCUserInfo *)userInfo {
+  [[RCIM sharedRCIM] refreshUserInfoCache:userInfo withUserId:userInfo.userId];
+}
+
+- (void)setUserInfoProvider:(id)userInfoProviderId {
+  self.refreshUserInfoCallbackId = userInfoProviderId;
+  [RCIM sharedRCIM].userInfoDataSource = self;
+}
+
+- (void)getUserInfoWithUserId:(NSString *)userId
+                   completion:(void (^)(RCUserInfo *userInfo))completion {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if (self.refreshUserInfoCallbackId) {
+      NSDictionary *_result = @{@"result":@{@"userId":userId}};
+      [self.commandDelegate sendResult:_result error:nil withCallbackId:self.refreshUserInfoCallbackId doDelete:NO];
+    }
+  });
+}
+
+#endif
+
+#ifdef RC_SUPPORT_IMKIT
+- (void)onRCIMConnectionStatusChanged:(RCConnectionStatus)status;
+#else
 - (void)onConnectionStatusChanged:(RCConnectionStatus)status
+#endif
 {
     if (self.connectionCallbackId) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -220,45 +276,51 @@ static BOOL isConnected = NO;
 
 - (void)_sendMessage:(RCConversationType)conversationType withTargetId:(NSString *)targetId withContent:(RCMessageContent *)messageContent withPushContent:(NSString *)pushContent withCallBackId:(id)cbId
 {
-    __weak __typeof(self)weakSelf = self;
-    RCMessage *rcMessage = [[RCIMClient sharedRCIMClient]sendMessage:conversationType
-                                                            targetId:targetId
-                                                             content:messageContent
-                                                         pushContent:pushContent
-                                                             success:^(long messageId) {
-                                                                 NSLog(@"success");
-                                                                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                                     NSLog(@"%s", __FUNCTION__);
-                                                                     NSLog(@"callback success");
-                                                                     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-                                                                     
-                                                                     [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
-                                                                     
-                                                                     [dic setObject:[NSNumber numberWithBool:YES] forKey:@"isSuccess"];
-                                                                     
-                                                                     NSDictionary *_result = @{@"status":SUCCESS, @"result":@{@"message":@{@"messageId":@(messageId)}}};
-                                                                     [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:cbId doDelete:YES];
-                                                                 });
-                                                             }
-                                                               error:^(RCErrorCode nErrorCode, long messageId) {
-                                                                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                                       NSLog(@"%s", __FUNCTION__);
-                                                                       NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-                                                                       
-                                                                       [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
-                                                                       
-                                                                       [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isSuccess"];
-                                                                       
-                                                                       NSDictionary *_result = @{@"status":ERROR, @"result":@{@"message": @{@"messageId":@(messageId)}}};
-                                                                       NSDictionary *_err = @{@"code": @(nErrorCode), @"msg": @""};
-                                                                       [weakSelf.commandDelegate sendResult:_result error:_err withCallbackId:cbId doDelete:YES];
-                                                                   });
-                                                               }];
-    NSLog(@"perpare");
-    NSDictionary *_message = [RongCloudModel RCGenerateMessageModel:rcMessage];
-    NSDictionary *_result = @{@"status":PREPARE, @"result": @{@"message":_message}};
-    
-    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:cbId doDelete:NO];
+
+  __weak __typeof(self)weakSelf = self;
+#ifdef RC_SUPPORT_IMKIT
+  RCMessage *rcMessage = [[RCIM sharedRCIM] sendMessage:conversationType
+#else
+  RCMessage *rcMessage = [[RCIMClient sharedRCIMClient]sendMessage:conversationType
+#endif
+                                                        targetId:targetId
+                                                         content:messageContent
+                                                     pushContent:pushContent
+                                                        pushData:nil
+                                                         success:^(long messageId) {
+                                                           NSLog(@"success");
+                                                           dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                                             NSLog(@"%s", __FUNCTION__);
+                                                             NSLog(@"callback success");
+                                                             NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+                                                             
+                                                             [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
+                                                             
+                                                             [dic setObject:[NSNumber numberWithBool:YES] forKey:@"isSuccess"];
+                                                             
+                                                             NSDictionary *_result = @{@"status":SUCCESS, @"result":@{@"message":@{@"messageId":@(messageId)}}};
+                                                             [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:cbId doDelete:YES];
+                                                           });
+                                                         }
+                                                           error:^(RCErrorCode nErrorCode, long messageId) {
+                                                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                                               NSLog(@"%s", __FUNCTION__);
+                                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+                                                               
+                                                               [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
+                                                               
+                                                               [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isSuccess"];
+                                                               
+                                                               NSDictionary *_result = @{@"status":ERROR, @"result":@{@"message": @{@"messageId":@(messageId)}}};
+                                                               NSDictionary *_err = @{@"code": @(nErrorCode), @"msg": @""};
+                                                               [weakSelf.commandDelegate sendResult:_result error:_err withCallbackId:cbId doDelete:YES];
+                                                             });
+                                                           }];
+                          NSLog(@"perpare");
+                          NSDictionary *_message = [RongCloudModel RCGenerateMessageModel:rcMessage];
+                          NSDictionary *_result = @{@"status":PREPARE, @"result": @{@"message":_message}};
+                          
+                          [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:cbId doDelete:NO];
 }
 
 /**
@@ -337,51 +399,56 @@ static BOOL isConnected = NO;
     imageMessage.thumbnailImage          = [UIImage imageWithData:[RongCloudModel compressedImageAndScalingSize:image targetSize:CGSizeMake(360.0f, 360.0f) percent:0.4f]];
     
     __weak __typeof(self)weakSelf = self;
-    RCMessage *rcMessage = [[RCIMClient sharedRCIMClient] sendImageMessage:_conversationType
-                                                                  targetId:targetId
-                                                                   content:imageMessage
-                                                               pushContent:nil
-                                                                  progress:^(int progress, long messageId) {
-                                                                      if (0 == progress) {
-                                                                          NSDictionary *_result = @{@"status":PROGRESS, @"result": @{@"message":@{@"messageId":@(messageId)}, @"progress":@(0)}};
-          
-                                                                          [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
-                                                                      }else if (50 == progress)
-                                                                      {
-                                                                          NSDictionary *_result = @{@"status":PROGRESS, @"result": @{@"message":@{@"messageId":@(messageId)}, @"progress":@(50)}};
-                                                                          
-                                                                          [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
-                                                                      }else if (100 == progress)
-                                                                      {
-                                                                          NSDictionary *_result = @{@"status":PROGRESS, @"result": @{@"message":@{@"messageId":@(messageId)}, @"progress":@(100)}};
-                                                                          
-                                                                          [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
-                                                                      }
-                                                                  } success:^(long messageId) {
-                                                                      NSLog(@"%s", __FUNCTION__);
-                                                                      
-                                                                      NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-                                                                      
-                                                                      [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
-                                                                      
-                                                                      [dic setObject:[NSNumber numberWithBool:YES] forKey:@"isSuccess"];
-                                                                      
-                                                                      
-                                                                      NSDictionary *_result = @{@"status":SUCCESS, @"result":@{@"message":@{@"messageId":@(messageId)}}};
-                                                                      [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:YES];
-                                                                  } error:^(RCErrorCode errorCode, long messageId) {
-                                                                      NSLog(@"%s", __FUNCTION__);
-                                                                      NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-                                                                      
-                                                                      [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
-                                                                      
-                                                                      [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isSuccess"];
-                                                                      
-                                                                      NSDictionary *_result = @{@"status":ERROR, @"result":@{@"message": @{@"messageId":@(messageId)}}};
-                                                                      NSDictionary *_err = @{@"code": @(errorCode), @"msg": @""};
-                                                                      [weakSelf.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
-                                            
-                                                                  }];
+#ifdef RC_SUPPORT_IMKIT
+  RCMessage *rcMessage = [[RCIM sharedRCIM] sendImageMessage:_conversationType
+#else
+  RCMessage *rcMessage = [[RCIMClient sharedRCIMClient] sendImageMessage:_conversationType
+#endif
+                                                                targetId:targetId
+                                                                 content:imageMessage
+                                                             pushContent:nil
+                                                                pushData:nil
+                                                                progress:^(int progress, long messageId) {
+                                                                  if (0 == progress) {
+                                                                    NSDictionary *_result = @{@"status":PROGRESS, @"result": @{@"message":@{@"messageId":@(messageId)}, @"progress":@(0)}};
+                                                                    
+                                                                    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+                                                                  }else if (50 == progress)
+                                                                  {
+                                                                    NSDictionary *_result = @{@"status":PROGRESS, @"result": @{@"message":@{@"messageId":@(messageId)}, @"progress":@(50)}};
+                                                                    
+                                                                    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+                                                                  }else if (100 == progress)
+                                                                  {
+                                                                    NSDictionary *_result = @{@"status":PROGRESS, @"result": @{@"message":@{@"messageId":@(messageId)}, @"progress":@(100)}};
+                                                                    
+                                                                    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+                                                                  }
+                                                                } success:^(long messageId) {
+                                                                  NSLog(@"%s", __FUNCTION__);
+                                                                  
+                                                                  NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+                                                                  
+                                                                  [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
+                                                                  
+                                                                  [dic setObject:[NSNumber numberWithBool:YES] forKey:@"isSuccess"];
+                                                                  
+                                                                  
+                                                                  NSDictionary *_result = @{@"status":SUCCESS, @"result":@{@"message":@{@"messageId":@(messageId)}}};
+                                                                  [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:YES];
+                                                                } error:^(RCErrorCode errorCode, long messageId) {
+                                                                  NSLog(@"%s", __FUNCTION__);
+                                                                  NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+                                                                  
+                                                                  [dic setObject:[NSNumber numberWithLong:messageId] forKey:@"messageId"];
+                                                                  
+                                                                  [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isSuccess"];
+                                                                  
+                                                                  NSDictionary *_result = @{@"status":ERROR, @"result":@{@"message": @{@"messageId":@(messageId)}}};
+                                                                  NSDictionary *_err = @{@"code": @(errorCode), @"msg": @""};
+                                                                  [weakSelf.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
+                                                                  
+                                                                }];
     
     NSDictionary *_message = [RongCloudModel RCGenerateMessageModel:rcMessage];
     NSDictionary *_result = @{@"status":PREPARE, @"result": @{@"message":_message}};
@@ -415,15 +482,25 @@ static BOOL isConnected = NO;
     
     RCConversationType _conversationType = [RongCloudModel RCTransferConversationType:conversationTypeString];
     
+//    NSBundle *myBundle = [NSBundle mainBundle];
+//    NSString *testArm = [myBundle pathForResource:@"testVoice" ofType:@"amr"];
+
     NSData *amrData = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:_truePath]];
+
     if (amrData == nil) {
         NSDictionary *_result = @{@"status":ERROR};
         NSDictionary *_err    = @{@"code":@(BAD_PARAMETER_CODE), @"msg": BAD_PARAMETER_MSG};
         [self.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
         return;
     }
-    
-    NSData *wavData                = [[RCAMRDataConverter sharedAMRDataConverter]dcodeAMRToWAVE:amrData];
+    NSData *wavData ;
+    if (amrData.length > 6 && ((unsigned char*)amrData.bytes)[0] == 0x23 && ((unsigned char*)amrData.bytes)[1] == 0x21 && ((unsigned char*)amrData.bytes)[2] == 0x41 && ((unsigned char*)amrData.bytes)[3] == 0x4d && ((unsigned char*)amrData.bytes)[4] == 0x52) {
+        //amr first 6 byte are 0x23 0x21 0x41 0x4d 0x52 0X0A(#!AMR.)
+        wavData                = [[RCAMRDataConverter sharedAMRDataConverter]decodeAMRToWAVE:amrData];
+    } else {
+        wavData = amrData;
+    }
+
     RCVoiceMessage *rcVoiceMessage = [RCVoiceMessage messageWithAudio:wavData duration:duration.intValue];
     rcVoiceMessage.extra           = extra;
     [self _sendMessage:_conversationType withTargetId:targetId withContent:rcVoiceMessage withPushContent:nil withCallBackId:callbackId];
@@ -528,14 +605,48 @@ static BOOL isConnected = NO;
     [self _sendMessage:_conversationType withTargetId:targetId withContent:msg withPushContent:nil withCallBackId:callbackId];
 }
 
+-(void)sendCommandMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId name:(NSString *)name data:(NSString *)data callbackId:(id)callbackId
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (![self checkIsInitOrConnect:callbackId doDelete:YES]) {
+        return;
+    }
+    
+    if (![conversationTypeString isKindOfClass:[NSString class]] ||
+        ![targetId isKindOfClass:[NSString class]] ||
+        ![name isKindOfClass:[NSString class]] ||
+        ![data isKindOfClass:[NSString class]]
+        ) {
+        
+        NSDictionary *_result = @{@"status":ERROR};
+        NSDictionary *_err =  @{@"code":@(BAD_PARAMETER_CODE), @"msg": BAD_PARAMETER_MSG};
+        [self.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
+        return;
+    }
+    
+    RCConversationType _conversationType = [RongCloudModel RCTransferConversationType:conversationTypeString];
+    RCCommandMessage *msg    = [RCCommandMessage messageWithName:name data:data];
+    [self _sendMessage:_conversationType withTargetId:targetId withContent:msg withPushContent:nil withCallBackId:callbackId];
+}
+
 - (void)setOnReceiveMessageListener:(id)receiveMessageCbId
 {
     NSLog(@"%s", __FUNCTION__);
     self.receiveMessageCbId = receiveMessageCbId;
+
+#ifdef RC_SUPPORT_IMKIT
+    [[RCIM sharedRCIM] setReceiveMessageDelegate:self];
+#else
     [[RCIMClient sharedRCIMClient]setReceiveMessageDelegate:self object:nil];
+#endif
 }
 
+#ifdef RC_SUPPORT_IMKIT
+- (void)onRCIMReceiveMessage:(RCMessage *)message left:(int)nLeft;
+#else
 - (void)onReceived:(RCMessage *)message left:(int)nLeft object:(id)object
+#endif
 {
     NSLog(@"%s, isMainThread > %d", __FUNCTION__, [NSThread isMainThread]);
     
@@ -549,20 +660,22 @@ static BOOL isConnected = NO;
     /**
      *  Add Local Notification Event
      */
-    NSNumber *nAppbackgroundMode = [[NSUserDefaults standardUserDefaults]objectForKey:kAppBackgroundMode];
-    BOOL _bAppBackgroundMode = [nAppbackgroundMode boolValue];
-    if (YES == _bAppBackgroundMode && 0 == nLeft) {
-        //post local notification
-        [[RCIMClient sharedRCIMClient]getConversationNotificationStatus:message.conversationType targetId:message.targetId success:^(RCConversationNotificationStatus nStatus) {
-            if (NOTIFY == nStatus) {
-                NSString *_notificationMessae = @"您收到了一条新消息";
-                
-                [RongCloudModel postLocalNotification:_notificationMessae];
-                
-            }
-        } error:^(RCErrorCode status) {
-            NSLog(@"notification error code= %d",(int)status);
-        }];
+    if (!self.disableLocalNotification) {
+        NSNumber *nAppbackgroundMode = [[NSUserDefaults standardUserDefaults]objectForKey:kAppBackgroundMode];
+        BOOL _bAppBackgroundMode = [nAppbackgroundMode boolValue];
+        if (YES == _bAppBackgroundMode && 0 == nLeft) {
+            //post local notification
+            [[RCIMClient sharedRCIMClient]getConversationNotificationStatus:message.conversationType targetId:message.targetId success:^(RCConversationNotificationStatus nStatus) {
+                if (NOTIFY == nStatus) {
+                    NSString *_notificationMessae = @"您收到了一条新消息";
+                    
+                    [RongCloudModel postLocalNotification:_notificationMessae];
+                    
+                }
+            } error:^(RCErrorCode status) {
+                NSLog(@"notification error code= %d",(int)status);
+            }];
+        }
     }
 }
 
@@ -1569,8 +1682,12 @@ static BOOL isConnected = NO;
     if (![self checkIsInitOrConnect:callbackId doDelete:YES]) {
         return;
     }
-    
+  
+#ifdef RC_SUPPORT_IMKIT
+  [[RCIM sharedRCIM] disconnect:NO];
+#else
     [[RCIMClient sharedRCIMClient]disconnect:NO];
+#endif
     isConnected = NO;
     NSDictionary *_result = @{@"status": SUCCESS};
     
@@ -1601,9 +1718,8 @@ static BOOL isConnected = NO;
     
     __weak __typeof(self)blockSelf = self;
     RCConversationType _conversationType = [RongCloudModel RCTransferConversationType:conversationTypeString];
-    NSDate *cur = [[NSDate alloc] init];
-    cur = [cur dateByAddingTimeInterval:-30 *24*60 *60];
-    [[RCIMClient sharedRCIMClient] getRemoteHistoryMessages:_conversationType targetId:targetId recordTime:0 count:[count intValue] success:^(NSArray *messages) {
+
+    [[RCIMClient sharedRCIMClient] getRemoteHistoryMessages:_conversationType targetId:targetId recordTime:[dateTime longLongValue] count:[count intValue] success:^(NSArray *messages) {
         
         NSMutableArray * _historyMessageListModel = nil;
         _historyMessageListModel = [RongCloudModel RCGenerateMessageListModel:messages];
@@ -1840,4 +1956,121 @@ static BOOL isConnected = NO;
         [self.commandDelegate sendResult:_result error:_err withCallbackId:callbackId doDelete:YES];
     }];
 }
+- (void)disableLocalNotification:(id)callbackId {
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (![self checkIsInit:callbackId doDelete:YES]) {
+        return;
+    }
+    
+    self.disableLocalNotification = YES;
+
+    
+    NSDictionary *_result = @{@"status": SUCCESS};
+    [self.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:YES];
+}
+
+- (NSDictionary *)dictionaryOfCustomerServiceGroupItem:(RCCustomerServiceGroupItem *)item {
+    return @{@"groupId":item.groupId, @"name":item.name, @"online":@(item.online)};
+}
+                          
+- (void)startCustomerService:(NSString *)kefuId userName:(NSString *)userName withCallbackId:(id)callbackId {
+  RCCustomerServiceInfo *csInfo = [[RCCustomerServiceInfo alloc] init];
+  csInfo.userId = [RCIMClient sharedRCIMClient].currentUserInfo.userId;
+  csInfo.nickName = userName;
+  
+  __weak RongCloudHybridAdapter* weakSelf = self;
+  
+  [[RCIMClient sharedRCIMClient] startCustomerService:kefuId info:csInfo onSuccess:^(RCCustomerServiceConfig *config) {
+    NSDictionary *_result = @{@"status":@"success"};
+    
+    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+  } onError:^(int errorCode, NSString *errMsg) {
+    if (errMsg == nil)
+      errMsg = @"";
+    NSDictionary *_result = @{@"status":@"error", @"result": @{@"errorCode":@(errorCode), @"errorMsg":errMsg}};
+    
+    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+  } onModeType:^(RCCSModeType mode) {
+    NSDictionary *_result = @{@"status":@"modeChanged", @"result": @{@"mode":@(mode)}};
+    
+    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+  } onPullEvaluation:^(NSString *dialogId) {
+    NSDictionary *_result = @{@"status":@"pullEvaluation", @"result": @{@"dialogId":dialogId}};
+    
+    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+  } onSelectGroup:^(NSArray<RCCustomerServiceGroupItem *> *groupList) {
+    NSMutableArray *groupItemDictList = [NSMutableArray new];
+    for (RCCustomerServiceGroupItem *item in groupList) {
+      [groupItemDictList addObject:[weakSelf dictionaryOfCustomerServiceGroupItem:item]];
+    }
+    NSDictionary *_result = @{@"status":@"selectGroup", @"result": @{@"groupList":groupItemDictList}};
+    
+    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:NO];
+  } onQuit:^(NSString *quitMsg) {
+    NSDictionary *_result = @{@"status":@"quit", @"result": @{@"quitMsg":quitMsg}};
+  
+    [weakSelf.commandDelegate sendResult:_result error:nil withCallbackId:callbackId doDelete:YES];
+  }];
+}
+
+- (void)stopCustomerService:(NSString *)kefuId withCallbackId:(id)callbackId {
+  [[RCIMClient sharedRCIMClient] stopCustomerService:kefuId];
+}
+
+- (void)selectCustomerServiceGroup:(NSString *)kefuId withGroupId:(NSString *)groupId withCallbackId:(id)callbackId {
+  [[RCIMClient sharedRCIMClient] selectCustomerServiceGroup:kefuId withGroupId:groupId];
+}
+
+- (void)switchToHumanMode:(NSString *)kefuId withCallbackId:(id)callbackId {
+  [[RCIMClient sharedRCIMClient] switchToHumanMode:kefuId];
+}
+
+- (void)evaluateCustomerService:(NSString *)kefuId
+                      knownledgeId:(NSString *)knownledgeId
+                        robotValue:(BOOL)isRobotResolved
+                           suggest:(NSString *)suggest
+                    withCallbackId:(id)callbackId {
+  [[RCIMClient sharedRCIMClient] evaluateCustomerService:kefuId knownledgeId:knownledgeId robotValue:isRobotResolved suggest:suggest];
+}
+
+- (void)evaluateCustomerService:(NSString *)kefuId
+                          dialogId:(NSString *)dialogId
+                        humanValue:(int)value
+                           suggest:(NSString *)suggest
+                    withCallbackId:(id)callbackId {
+  [[RCIMClient sharedRCIMClient] evaluateCustomerService:kefuId dialogId:dialogId humanValue:value suggest:suggest];
+}
+                          
+#ifdef RC_SUPPORT_IMKIT
+- (void)startNativeSingleCall:(NSString *)calleeId mediaType:(int)mediaType withCallBackId:(id)cbId {
+    [[RCCall sharedRCCall] startSingleCall:calleeId mediaType:(RCCallMediaType)mediaType];
+}
+                          
+- (void)startNativeMultiCall:(NSString *)conversationTypeString targetId:(NSString *)targetId userIdList:(NSArray *)userIdList mediaType:(int)mediaType withCallBackId:(id)cbId {
+  RCConversationType conversationType = [RongCloudModel RCTransferConversationType:conversationTypeString];
+  [[RCCall sharedRCCall] startMultiCallViewController:conversationType targetId:targetId mediaType:mediaType userIdList:userIdList];
+}
+                          
+- (void)startNativeCustomerService:(NSString *)kefuId withUserName:(NSString *)userName withCallbackId:cbId {
+  RCDCustomerServiceViewController *chatService = [[RCDCustomerServiceViewController alloc] init];
+  
+  chatService.userName = @"客服";
+  chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+  
+  chatService.targetId = kefuId;
+  
+  //上传用户信息，nickname是必须要填写的
+  RCCustomerServiceInfo *csInfo = [[RCCustomerServiceInfo alloc] init];
+  csInfo.userId = [RCIMClient sharedRCIMClient].currentUserInfo.userId;
+  csInfo.nickName = userName;
+  
+  chatService.csInfo = csInfo;
+  chatService.title = chatService.userName;
+  
+  UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:chatService];
+  
+  [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navi animated:YES completion:nil];
+}
+#endif
 @end

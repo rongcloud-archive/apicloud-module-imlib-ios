@@ -8,6 +8,9 @@
 
 #import <RongIMLib/RongIMLib.h>
 
+#ifdef RC_SUPPORT_IMKIT
+#import <RongIMKit/RongIMKit.h>
+#endif
 
 @protocol RongCloud2HybridDelegation <NSObject>
 - (void)sendResult:(NSDictionary *)resultDict error:(NSDictionary *)errorDict withCallbackId:(id)callbackId doDelete:(BOOL)doDelete;
@@ -15,7 +18,13 @@
 @end
 
 
-@interface RongCloudHybridAdapter : NSObject <RCIMClientReceiveMessageDelegate, RCConnectionStatusChangeDelegate>
+@interface RongCloudHybridAdapter : NSObject <
+#ifdef RC_SUPPORT_IMKIT
+RCIMReceiveMessageDelegate, RCIMConnectionStatusDelegate, RCIMUserInfoDataSource
+#else
+RCIMClientReceiveMessageDelegate,RCConnectionStatusChangeDelegate
+#endif
+>
 - (instancetype)initWithDelegate:(id<RongCloud2HybridDelegation>) commandDelegate;
 
 - (void)init:(NSString *)appKey callbackId:(id)callbackId;
@@ -27,7 +36,8 @@
 - (void)sendVoiceMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId voicePath:(NSString *)voicePath duration:(NSNumber *)duration extra:(NSString *)extra callbackId:(id)callbackId;
 - (void)sendLocationMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId imagePath:(NSString *)imagePath latitude:(NSNumber *)latitude longitude:(NSNumber *)longitude locationName:(NSString *)locationName extra:(NSString *)extra callbackId:(id)callbackId;
 - (void)sendRichContentMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId title:(NSString *)title content:(NSString *)content imageUrl:(NSString *)imageUrl extra:(NSString *)extra callbackId:(id)callbackId;
-- (void)sendCommandNotificationMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId name:(NSString *)name data:(NSString *)data callbackId:(id)callbackId;;
+- (void)sendCommandNotificationMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId name:(NSString *)name data:(NSString *)data callbackId:(id)callbackId;
+-(void)sendCommandMessage:(NSString *)conversationTypeString targetId:(NSString *)targetId name:(NSString *)name data:(NSString *)data callbackId:(id)callbackId;
 - (void)setOnReceiveMessageListener:(id)receiveMessageCbId;
 - (void)getConversationList:(id)callbackId;
 - (void)getConversation:(NSString *)conversationTypeString targetId:(NSString *)targetId callbackId:(id)callbackId;
@@ -107,4 +117,26 @@
 
 - (void)getNotificationQuietHours:(id)callbackId;
 
+- (void)disableLocalNotification:(id)callbackId;
+
+
+- (void)startCustomerService:(NSString *)kefuId userName:(NSString *)userName withCallbackId:(id)callbackId;
+
+- (void)stopCustomerService:(NSString *)kefuId withCallbackId:(id)callbackId;
+
+- (void)selectCustomerServiceGroup:(NSString *)kefuId withGroupId:(NSString *)groupId withCallbackId:(id)callbackId;
+- (void)switchToHumanMode:(NSString *)kefuId withCallbackId:(id)callbackId;
+
+- (void)evaluateCustomerService:(NSString *)kefuId knownledgeId:(NSString *)knownledgeId robotValue:(BOOL)isRobotResolved suggest:(NSString *)suggest withCallbackId:(id)callbackId;
+
+- (void)evaluateCustomerService:(NSString *)kefuId dialogId:(NSString *)dialogId humanValue:(int)value suggest:(NSString *)suggest withCallbackId:(id)callbackId;
+
+#ifdef RC_SUPPORT_IMKIT
+- (void)startNativeSingleCall:(NSString *)calleeId mediaType:(int)mediaType withCallBackId:(id)cbId;
+- (void)startNativeMultiCall:(NSString *)conversationTypeString targetId:(NSString *)targetId userIdList:(NSArray *)userIdList mediaType:(int)mediaType withCallBackId:(id)cbId;
+
+- (void)startNativeCustomerService:(NSString *)kefuId withUserName:(NSString *)userName withCallbackId:cbId;
+- (void)refreshUserInfo:(RCUserInfo *)userInfo;
+- (void)setUserInfoProvider:(id)userInfoProviderId;
+#endif
 @end

@@ -18,55 +18,61 @@ FOUNDATION_EXPORT double RongIMLibVersionNumber;
 //! Project version string for RongIMLib.
 FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 
-// In this header, you should import all the public headers of your framework
-// using statements like #import <RongIMLib/PublicHeader.h>
-
-#import <RongIMLib/interf_enc.h>
-#import <RongIMLib/interf_dec.h>
+/// IMLib核心类
 #import <RongIMLib/RCIMClient.h>
-#import <RongIMLib/RCMessageContent.h>
-#import <RongIMLib/RCMessage.h>
-//#import <RongIMLib/RCNotificationMessage.h>
-#import <RongIMLib/RCUserInfo.h>
-#import <RongIMLib/RCPublicServiceProfile.h>
-#import <RongIMLib/RCImageMessage.h>
-#import <RongIMLib/RCVoiceMessage.h>
 #import <RongIMLib/RCStatusDefine.h>
-#import <RongIMLib/RCTextMessage.h>
-#import <RongIMLib/RCUtilities.h>
-#import <RongIMLib/RCLocationMessage.h>
-#import <RongIMLib/RCInformationNotificationMessage.h>
-#import <RongIMLib/RCContactNotificationMessage.h>
-#import <RongIMLib/RCGroup.h>
-#import <RongIMLib/RCGroupNotificationMessage.h>
-#import <RongIMLib/RCRichContentMessage.h>
-#import <RongIMLib/RCAmrDataConverter.h>
-#import <RongIMLib/RCCommandNotificationMessage.h>
-#import <RongIMLib/RCDiscussion.h>
+/// 会话相关类
+#import <RongIMLib/RCChatRoomInfo.h>
 #import <RongIMLib/RCConversation.h>
-#import <RongIMLib/RCProfileNotificationMessage.h>
+#import <RongIMLib/RCDiscussion.h>
+#import <RongIMLib/RCGroup.h>
+#import <RongIMLib/RCUserTypingStatus.h>
+/// 消息相关类
+#import <RongIMLib/RCCommandMessage.h>
+#import <RongIMLib/RCCommandNotificationMessage.h>
+#import <RongIMLib/RCContactNotificationMessage.h>
 #import <RongIMLib/RCDiscussionNotificationMessage.h>
-#import <RongIMLib/RCStatusMessage.h>
-#import <RongIMLib/RCJSONConverter.h>
-//#import <RongIMLib/RCMessageMapper.h>
-#import <RongIMLib/RCUnknownMessage.h>
-#import <RongIMLib/RCPublicServiceMenu.h>
+#import <RongIMLib/RCGroupNotificationMessage.h>
+#import <RongIMLib/RCImageMessage.h>
+#import <RongIMLib/RCInformationNotificationMessage.h>
+#import <RongIMLib/RCLocationMessage.h>
+#import <RongIMLib/RCMessage.h>
+#import <RongIMLib/RCMessageContent.h>
+#import <RongIMLib/RCMessageContentView.h>
+#import <RongIMLib/RCProfileNotificationMessage.h>
+#import <RongIMLib/RCPublicServiceCommandMessage.h>
 #import <RongIMLib/RCPublicServiceMultiRichContentMessage.h>
 #import <RongIMLib/RCPublicServiceRichContentMessage.h>
-#import <RongIMLib/RCPublicServiceCommandMessage.h>
-#import <RongIMLib/RCMessageContentView.h>
-#import <RongIMLib/RCHandShakeMessage.h>
-#import <RongIMLib/RCSuspendMessage.h>
-#import <RongIMLib/RCPersonalInfo.h>
-#import <RongIMLib/RCAccountInfo.h>
-#import <RongIMLib/RCContactInfo.h>
-#import <RongIMLib/RCClientInfo.h>
-#import <RongIMLib/RCUserData.h>
-#import <RongIMLib/RCWatchKitStatusDelegate.h>
-#import <RongIMLib/RCRealTimeLocationManager.h>
-#import <RongIMLib/RCRealTimeLocationStartMessage.h>
 #import <RongIMLib/RCRealTimeLocationEndMessage.h>
-#import <RongIMLib/RCUploadImageStatusListener.h>
+#import <RongIMLib/RCRealTimeLocationStartMessage.h>
+#import <RongIMLib/RCRichContentMessage.h>
+#import <RongIMLib/RCTextMessage.h>
+#import <RongIMLib/RCUnknownMessage.h>
+#import <RongIMLib/RCVoiceMessage.h>
+#import <RongIMLib/RCRecallNotificationMessage.h>
+/// 工具类
+#import <RongIMLib/RCAmrDataConverter.h>
+#import <RongIMLib/RCUtilities.h>
+#import <RongIMLib/interf_dec.h>
+#import <RongIMLib/interf_enc.h>
 
-#import <RongIMLib/RCPublicServiceDataSource.h>
-#import <RongIMLib/RCDetailUserInfo.h>
+///客服
+#import <RongIMLib/RCCustomerServiceInfo.h>
+#import <RongIMLib/RCEvaluateItem.h>
+
+/// 其他
+#import <RongIMLib/RCChatRoomMemberInfo.h>
+#import <RongIMLib/RCPublicServiceMenu.h>
+#import <RongIMLib/RCPublicServiceProfile.h>
+#import <RongIMLib/RCRealTimeLocationManager.h>
+#import <RongIMLib/RCStatusMessage.h>
+#import <RongIMLib/RCUploadImageStatusListener.h>
+#import <RongIMLib/RCUploadMediaStatusListener.h>
+#import <RongIMLib/RCUserInfo.h>
+#import <RongIMLib/RCWatchKitStatusDelegate.h>
+#import <RongIMLib/RCCustomerServiceGroupItem.h>
+
+#import <RongIMLib/RCFileMessage.h>
+#import <RongIMLib/RCFileUtility.h>
+#import <RongIMLib/RCReadReceiptInfo.h>
+#import <RongIMLib/RCUserOnlineStatusInfo.h>

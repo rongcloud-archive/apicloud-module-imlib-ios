@@ -131,7 +131,7 @@
 }
 + (RCConversationType)RCTransferConversationType:(NSString *)oldValue
 {
-    RCConversationType newConversationType;
+    RCConversationType newConversationType = ConversationType_PRIVATE;
     if ([oldValue isEqualToString:@"PRIVATE"]) {
         newConversationType = ConversationType_PRIVATE;
     }else if ([oldValue isEqualToString:@"GROUP"])
@@ -146,7 +146,8 @@
     }else if ([oldValue isEqualToString:@"CUSTOMER_SERVICE"])
     {
         newConversationType = ConversationType_CUSTOMERSERVICE;
-    }else if ([oldValue isEqualToString:@"system"])
+    }else if ([oldValue isEqualToString:@"SYSTEM"] ||
+              [oldValue isEqualToString:@"system"]) //小写的system是为了兼容历史遗留问题。
     {
         newConversationType = ConversationType_SYSTEM;
     }
@@ -450,7 +451,7 @@
                            @"messageDirection"      :   _msgDirection,//@(message.messageDirection),
                            @"senderUserId"          :   message.senderUserId,
                            @"receivedStatus"        :   [self RCTransferReceivedStatus:message.receivedStatus],
-                           @"sentStatus"            :   _sentStatus,//@(message.sentStatus),
+                           @"sentStatus"            :   _sentStatus ? _sentStatus : @"",
                            @"receivedTime"          :   @(message.receivedTime),
                            @"sentTime"              :   @(message.sentTime),
                            @"objectName"            :   message.objectName,

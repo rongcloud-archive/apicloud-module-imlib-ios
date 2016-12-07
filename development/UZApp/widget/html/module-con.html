@@ -16,7 +16,7 @@
                            
         function init() {
             var param = {
-                appKey: "z3v5yqkbv8v30"
+                appKey: "n19jmcy59f1q9"
             };
 
             var resultCallback = function(ret, err) {
@@ -33,7 +33,7 @@
     //"nNvfq+uY7f5Nn8SmFPPw5kmcbyeYIrXSDa0nFvL2mH+qisY908p5KQeQ6zNg4jNgGIXebCOleFVkSSl4BaK1gQ==" //9119
         function connect() {
             var param = {
-                token: "Alwf+Ihwjhpt5ug+4HanEs2yq+hfEluLjZ78E1qo4hGEwEdzMQZ6WXyyumKbxs50xgXPYoZYXS4Tsh9twSBfXQ=="
+                token: "vlmp59xX16wszCbQiuYuwa+YsUIoF3ojin3K277sfOmMDgLI9ROp5uKCVOKjNRZaAt31dmTKAsDz91CZ2PZy3qtdpZUyLdaH"
             };
             var resultCallback = function(ret, err) {
                 if(ret.status == 'error'){
@@ -72,6 +72,23 @@
             };
 
 
+            rong.disconnect(param, resultCallback);
+        }
+
+        function disconnect_push() {
+            var param = {
+                isReceivePush: true
+            };
+            
+            var resultCallback = function(ret, err) {
+                if(ret.status == 'error'){
+                    alert(JSON.stringify(err));
+                }else{
+                    alert(JSON.stringify(ret));
+                }
+            };
+            
+            
             rong.disconnect(param, resultCallback);
         }
 
@@ -388,7 +405,7 @@
         function sendTextMessage() {
             var param = {
                 conversationType: "PRIVATE",
-                targetId: "23121",
+                targetId: "LEU82p5Zk",
                 text: "call this cloud",
                 extra: ""
             };
@@ -479,6 +496,20 @@
             }
 
             rong.sendCommandNotificationMessage(param, resultCallback);
+        }
+
+        function sendCommandMessage() {
+            var param = {
+                conversationType: "PRIVATE",
+                targetId: "23121",
+                name: "commont_name",
+                data: "commont_data"
+            };
+            var resultCallback = function(ret, err) {
+                alert(JSON.stringify(ret));
+            }
+            
+            rong.sendCommandMessage(param, resultCallback);
         }
 
         function getConversationNotificationStatus() {
@@ -727,6 +758,155 @@
             
             rong.getNotificationQuietHours({}, resultCallback);
         }
+
+        function disableLocalNotification() {
+
+            
+            var resultCallback = function(ret, err) {
+                alert(JSON.stringify(ret));
+            }
+            
+            rong.disableLocalNotification({}, resultCallback);
+        }
+
+        function startCustomerService() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+            userName: "LT1"
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.startCustomerService(param, resultCallback);
+        }
+
+        function stopCustomerService() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.stopCustomerService(param, resultCallback);
+        }
+
+        function selectCustomerServiceGroup() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+            groupId: "1"
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.selectCustomerServiceGroup(param, resultCallback);
+        }
+
+        function switchToHumanMode() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.switchToHumanMode(param, resultCallback);
+        }
+
+        function evaluateRobotCustomerService() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+            knownledgeId: "",
+            isRobotResolved:1,
+            suggest:""
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.evaluateRobotCustomerService(param, resultCallback);
+        }
+
+        function evaluateHumanCustomerService() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+            dialogId: "",
+            value:1,
+            suggest:""
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.evaluateHumanCustomerService(param, resultCallback);
+        }
+
+        function startNativeSingleCall() {
+          var param = {
+            calleeId: "LEU82p5Zk",
+            mediaType: 1
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.startNativeSingleCall(param, resultCallback);
+        }
+
+        function startNativeMultiCall() {
+          var param = {
+            conversationType:"DISCUSSION",
+            targetId: "55256f52-e492-4340-8c82-accc389ec777",
+            userIdList:["LEU82p5Zk","62rTm3kcW"],
+            mediaType: 1
+          };
+          
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.startNativeMultiCall(param, resultCallback);
+        }
+
+        function startNativeCustomerService() {
+          var param = {
+            kefuId: "KEFU146001495753714",
+            userName: "LT1"
+          };
+          var resultCallback = function(ret, err) {
+            alert(JSON.stringify(ret));
+          }
+          
+          rong.startNativeCustomerService(param, resultCallback);
+        }
+
+      function setUserInfoProvider() {
+
+        var resultCallback = function(ret, err) {
+              //alert(JSON.stringify(ret));
+              //alert(ret.result.userId);
+              refreshUserInfo(ret.result.userId);
+        }
+        
+        rong.setUserInfoProvider({}, resultCallback);
+      }
+
+      function refreshUserInfo(userId) {
+        var param = {
+          userId: userId,
+          name: "LT1",
+          portraitUri:"portraitUri"
+        };
+        
+        var resultCallback = function(ret, err) {
+          alert(JSON.stringify(ret));
+        }
+        
+        rong.refreshUserInfo(param, resultCallback);
+      }
+
     </script>
 </head>
 
@@ -741,6 +921,8 @@
             <input type="button" onclick="reconnect()" value="reconnect" />
             <br>
             <input type="button" onclick="disconnect()" value="disconnect" />
+            <br>
+            <input type="button" onclick="disconnect_push()" value="disconnect_push" />
             <br>
             <input type="button" onclick="setOnReceiveMessageListener()" value="setOnReceiveMessageListener" />
             <br>
@@ -805,6 +987,7 @@
             <input type="button" onclick="sendLocationMessage()" value="sendLocationMessage" />
             <br>
             <input type="button" onclick="sendCommandNotificationMessage()" value="sendCommandNotificationMessage" />
+            <input type="button" onclick="sendCommandMessage()" value="sendCommandMessage" />
             <br>
             <input type="button" onclick="getConversationNotificationStatus()" value="getConversationNotificationStatus" />
             <br>
@@ -849,7 +1032,33 @@
             <br>
             <input type="button" onclick="getNotificationQuietHours()" value="getNotificationQuietHours" />
             <br>
-
+            <input type="button" onclick="disableLocalNotification()" value="disableLocalNotification" />
+            <br>
+            <input type="button" onclick="startNativeSingleCall()" value="startNativeSingleCall" />
+            <br>
+            <input type="button" onclick="startNativeMultiCall()" value="startNativeMultiCall" />
+            <br>
+            <input type="button" onclick="startNativeCustomerService()" value="startNativeCustomerService" />
+            <br>
+            <input type="button" onclick="setUserInfoProvider()" value="setUserInfoProvider" />
+            <br>
+            <input type="button" onclick="refreshUserInfo(111)" value="refreshUserInfo" />
+            <br>
+            
+            <input type="button" onclick="startCustomerService()" value="startCustomerService" />
+            <br>
+            <input type="button" onclick="switchToHumanMode()" value="switchToHumanMode" />
+            <br>
+            <input type="button" onclick="selectCustomerServiceGroup()" value="selectCustomerServiceGroup" />
+            <br>
+            <input type="button" onclick="evaluateRobotCustomerService()" value="evaluateRobotCustomerService" />
+            <br>
+            <input type="button" onclick="evaluateHumanCustomerService()" value="evaluateHumanCustomerService" />
+            <br>
+            <input type="button" onclick="stopCustomerService()" value="stopCustomerService" />
+            <br>
+            
+            
         </div>
 
     </div>

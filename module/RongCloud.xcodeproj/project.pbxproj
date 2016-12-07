@@ -7,12 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A608BE1D1B8F07A400847DF7 /* RongIMLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A608BE0D1B8F07A400847DF7 /* RongIMLib.framework */; };
-		A61647771BE84DB300E90813 /* RongCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = A61647741BE84DB300E90813 /* RongCloud.m */; };
-		A61647781BE84DB300E90813 /* RongCloudHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A61647761BE84DB300E90813 /* RongCloudHandler.m */; };
-		A61647801BE84DBC00E90813 /* RongCloudApplicationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A616477A1BE84DBC00E90813 /* RongCloudApplicationHandler.m */; };
-		A61647811BE84DBC00E90813 /* RongCloudHybridAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = A616477D1BE84DBC00E90813 /* RongCloudHybridAdapter.m */; };
-		A61647821BE84DBC00E90813 /* RongCloudModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A616477F1BE84DBC00E90813 /* RongCloudModel.m */; };
+		2EF894191DF7BE8600F3FC0A /* RCDCustomerServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8940D1DF7BE8600F3FC0A /* RCDCustomerServiceViewController.m */; };
+		2EF8941A1DF7BE8600F3FC0A /* RongCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8940F1DF7BE8600F3FC0A /* RongCloud.m */; };
+		2EF8941B1DF7BE8600F3FC0A /* RongCloudApplicationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF894111DF7BE8600F3FC0A /* RongCloudApplicationHandler.m */; };
+		2EF8941C1DF7BE8600F3FC0A /* RongCloudHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF894141DF7BE8600F3FC0A /* RongCloudHandler.m */; };
+		2EF8941D1DF7BE8600F3FC0A /* RongCloudHybridAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF894161DF7BE8600F3FC0A /* RongCloudHybridAdapter.m */; };
+		2EF8941E1DF7BE8600F3FC0A /* RongCloudModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF894181DF7BE8600F3FC0A /* RongCloudModel.m */; };
+		2EF894671DF7BFC100F3FC0A /* AgoraRtcEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF894571DF7BFC100F3FC0A /* AgoraRtcEngineKit.framework */; };
+		2EF894691DF7BFC100F3FC0A /* RongCallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF8945E1DF7BFC100F3FC0A /* RongCallKit.framework */; };
+		2EF8946A1DF7BFC100F3FC0A /* RongCallLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF8945F1DF7BFC100F3FC0A /* RongCallLib.framework */; };
+		2EF8946B1DF7BFC100F3FC0A /* RongIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF894611DF7BFC100F3FC0A /* RongIMKit.framework */; };
+		2EF8946C1DF7BFC100F3FC0A /* RongIMLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF894621DF7BFC100F3FC0A /* RongIMLib.framework */; };
+		2EF8946D1DF7BFC100F3FC0A /* RongRTCEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF894631DF7BFC100F3FC0A /* RongRTCEngine.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,24 +35,36 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2EF8940C1DF7BE8600F3FC0A /* RCDCustomerServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDCustomerServiceViewController.h; path = UZModules/RCDCustomerServiceViewController.h; sourceTree = "<group>"; };
+		2EF8940D1DF7BE8600F3FC0A /* RCDCustomerServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDCustomerServiceViewController.m; path = UZModules/RCDCustomerServiceViewController.m; sourceTree = "<group>"; };
+		2EF8940E1DF7BE8600F3FC0A /* RongCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloud.h; path = UZModules/RongCloud.h; sourceTree = "<group>"; };
+		2EF8940F1DF7BE8600F3FC0A /* RongCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloud.m; path = UZModules/RongCloud.m; sourceTree = "<group>"; };
+		2EF894101DF7BE8600F3FC0A /* RongCloudApplicationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudApplicationHandler.h; path = UZModules/RongCloudApplicationHandler.h; sourceTree = "<group>"; };
+		2EF894111DF7BE8600F3FC0A /* RongCloudApplicationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudApplicationHandler.m; path = UZModules/RongCloudApplicationHandler.m; sourceTree = "<group>"; };
+		2EF894121DF7BE8600F3FC0A /* RongCloudConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudConstant.h; path = UZModules/RongCloudConstant.h; sourceTree = "<group>"; };
+		2EF894131DF7BE8600F3FC0A /* RongCloudHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudHandler.h; path = UZModules/RongCloudHandler.h; sourceTree = "<group>"; };
+		2EF894141DF7BE8600F3FC0A /* RongCloudHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudHandler.m; path = UZModules/RongCloudHandler.m; sourceTree = "<group>"; };
+		2EF894151DF7BE8600F3FC0A /* RongCloudHybridAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudHybridAdapter.h; path = UZModules/RongCloudHybridAdapter.h; sourceTree = "<group>"; };
+		2EF894161DF7BE8600F3FC0A /* RongCloudHybridAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudHybridAdapter.m; path = UZModules/RongCloudHybridAdapter.m; sourceTree = "<group>"; };
+		2EF894171DF7BE8600F3FC0A /* RongCloudModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudModel.h; path = UZModules/RongCloudModel.h; sourceTree = "<group>"; };
+		2EF894181DF7BE8600F3FC0A /* RongCloudModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudModel.m; path = UZModules/RongCloudModel.m; sourceTree = "<group>"; };
+		2EF894571DF7BFC100F3FC0A /* AgoraRtcEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraRtcEngineKit.framework; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/AgoraRtcEngineKit.framework"; sourceTree = "<group>"; };
+		2EF894581DF7BFC100F3FC0A /* Emoji.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Emoji.plist; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/Emoji.plist"; sourceTree = "<group>"; };
+		2EF8945B1DF7BFC100F3FC0A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = RongCloudKit.strings; sourceTree = "<group>"; };
+		2EF8945D1DF7BFC100F3FC0A /* RCConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = RCConfig.plist; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RCConfig.plist"; sourceTree = "<group>"; };
+		2EF8945E1DF7BFC100F3FC0A /* RongCallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongCallKit.framework; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RongCallKit.framework"; sourceTree = "<group>"; };
+		2EF8945F1DF7BFC100F3FC0A /* RongCallLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongCallLib.framework; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RongCallLib.framework"; sourceTree = "<group>"; };
+		2EF894601DF7BFC100F3FC0A /* RongCloud.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = RongCloud.bundle; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RongCloud.bundle"; sourceTree = "<group>"; };
+		2EF894611DF7BFC100F3FC0A /* RongIMKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongIMKit.framework; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RongIMKit.framework"; sourceTree = "<group>"; };
+		2EF894621DF7BFC100F3FC0A /* RongIMLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongIMLib.framework; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RongIMLib.framework"; sourceTree = "<group>"; };
+		2EF894631DF7BFC100F3FC0A /* RongRTCEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongRTCEngine.framework; path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/RongRTCEngine.framework"; sourceTree = "<group>"; };
+		2EF894661DF7BFC100F3FC0A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = RongCloudKit.strings; sourceTree = "<group>"; };
 		528608281A596B0600587EC2 /* libRongCloud.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRongCloud.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A608BE0D1B8F07A400847DF7 /* RongIMLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RongIMLib.framework; sourceTree = "<group>"; };
 		A608BE0F1B8F07A400847DF7 /* module.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = module.json; sourceTree = "<group>"; };
 		A608BE111B8F07A400847DF7 /* NSDictionaryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionaryUtils.h; sourceTree = "<group>"; };
 		A608BE121B8F07A400847DF7 /* UZAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UZAppDelegate.h; sourceTree = "<group>"; };
 		A608BE131B8F07A400847DF7 /* UZAppUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UZAppUtils.h; sourceTree = "<group>"; };
 		A608BE141B8F07A400847DF7 /* UZModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UZModule.h; sourceTree = "<group>"; };
-		A61647731BE84DB300E90813 /* RongCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloud.h; path = ../../../module/apicloud/RongCloud.h; sourceTree = "<group>"; };
-		A61647741BE84DB300E90813 /* RongCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloud.m; path = ../../../module/apicloud/RongCloud.m; sourceTree = "<group>"; };
-		A61647751BE84DB300E90813 /* RongCloudHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudHandler.h; path = ../../../module/apicloud/RongCloudHandler.h; sourceTree = "<group>"; };
-		A61647761BE84DB300E90813 /* RongCloudHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudHandler.m; path = ../../../module/apicloud/RongCloudHandler.m; sourceTree = "<group>"; };
-		A61647791BE84DBC00E90813 /* RongCloudApplicationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudApplicationHandler.h; path = ../../../module/common/RongCloudApplicationHandler.h; sourceTree = "<group>"; };
-		A616477A1BE84DBC00E90813 /* RongCloudApplicationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudApplicationHandler.m; path = ../../../module/common/RongCloudApplicationHandler.m; sourceTree = "<group>"; };
-		A616477B1BE84DBC00E90813 /* RongCloudConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudConstant.h; path = ../../../module/common/RongCloudConstant.h; sourceTree = "<group>"; };
-		A616477C1BE84DBC00E90813 /* RongCloudHybridAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudHybridAdapter.h; path = ../../../module/common/RongCloudHybridAdapter.h; sourceTree = "<group>"; };
-		A616477D1BE84DBC00E90813 /* RongCloudHybridAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudHybridAdapter.m; path = ../../../module/common/RongCloudHybridAdapter.m; sourceTree = "<group>"; };
-		A616477E1BE84DBC00E90813 /* RongCloudModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RongCloudModel.h; path = ../../../module/common/RongCloudModel.h; sourceTree = "<group>"; };
-		A616477F1BE84DBC00E90813 /* RongCloudModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RongCloudModel.m; path = ../../../module/common/RongCloudModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,13 +72,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A608BE1D1B8F07A400847DF7 /* RongIMLib.framework in Frameworks */,
+				2EF894671DF7BFC100F3FC0A /* AgoraRtcEngineKit.framework in Frameworks */,
+				2EF894691DF7BFC100F3FC0A /* RongCallKit.framework in Frameworks */,
+				2EF8946A1DF7BFC100F3FC0A /* RongCallLib.framework in Frameworks */,
+				2EF8946C1DF7BFC100F3FC0A /* RongIMLib.framework in Frameworks */,
+				2EF8946D1DF7BFC100F3FC0A /* RongRTCEngine.framework in Frameworks */,
+				2EF8946B1DF7BFC100F3FC0A /* RongIMKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EF894591DF7BFC100F3FC0A /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8945A1DF7BFC100F3FC0A /* RongCloudKit.strings */,
+			);
+			name = en.lproj;
+			path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/en.lproj";
+			sourceTree = "<group>";
+		};
+		2EF894641DF7BFC100F3FC0A /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				2EF894651DF7BFC100F3FC0A /* RongCloudKit.strings */,
+			);
+			name = "zh-Hans.lproj";
+			path = "../../../../iOS-Workspace/ios/ios-hybrid/apicloud/module/RongCloud/RongCloudLib/zh-Hans.lproj";
+			sourceTree = "<group>";
+		};
 		5286081F1A596B0600587EC2 = {
 			isa = PBXGroup;
 			children = (
@@ -91,7 +132,17 @@
 		A608BE0C1B8F07A400847DF7 /* RongCloudLib */ = {
 			isa = PBXGroup;
 			children = (
-				A608BE0D1B8F07A400847DF7 /* RongIMLib.framework */,
+				2EF894571DF7BFC100F3FC0A /* AgoraRtcEngineKit.framework */,
+				2EF894581DF7BFC100F3FC0A /* Emoji.plist */,
+				2EF894591DF7BFC100F3FC0A /* en.lproj */,
+				2EF8945D1DF7BFC100F3FC0A /* RCConfig.plist */,
+				2EF8945E1DF7BFC100F3FC0A /* RongCallKit.framework */,
+				2EF8945F1DF7BFC100F3FC0A /* RongCallLib.framework */,
+				2EF894601DF7BFC100F3FC0A /* RongCloud.bundle */,
+				2EF894611DF7BFC100F3FC0A /* RongIMKit.framework */,
+				2EF894621DF7BFC100F3FC0A /* RongIMLib.framework */,
+				2EF894631DF7BFC100F3FC0A /* RongRTCEngine.framework */,
+				2EF894641DF7BFC100F3FC0A /* zh-Hans.lproj */,
 			);
 			path = RongCloudLib;
 			sourceTree = "<group>";
@@ -118,17 +169,19 @@
 		A66887AB1BB538F20076A7C9 /* UZModules */ = {
 			isa = PBXGroup;
 			children = (
-				A61647731BE84DB300E90813 /* RongCloud.h */,
-				A61647741BE84DB300E90813 /* RongCloud.m */,
-				A61647751BE84DB300E90813 /* RongCloudHandler.h */,
-				A61647761BE84DB300E90813 /* RongCloudHandler.m */,
-				A61647791BE84DBC00E90813 /* RongCloudApplicationHandler.h */,
-				A616477A1BE84DBC00E90813 /* RongCloudApplicationHandler.m */,
-				A616477B1BE84DBC00E90813 /* RongCloudConstant.h */,
-				A616477C1BE84DBC00E90813 /* RongCloudHybridAdapter.h */,
-				A616477D1BE84DBC00E90813 /* RongCloudHybridAdapter.m */,
-				A616477E1BE84DBC00E90813 /* RongCloudModel.h */,
-				A616477F1BE84DBC00E90813 /* RongCloudModel.m */,
+				2EF8940C1DF7BE8600F3FC0A /* RCDCustomerServiceViewController.h */,
+				2EF8940D1DF7BE8600F3FC0A /* RCDCustomerServiceViewController.m */,
+				2EF8940E1DF7BE8600F3FC0A /* RongCloud.h */,
+				2EF8940F1DF7BE8600F3FC0A /* RongCloud.m */,
+				2EF894101DF7BE8600F3FC0A /* RongCloudApplicationHandler.h */,
+				2EF894111DF7BE8600F3FC0A /* RongCloudApplicationHandler.m */,
+				2EF894121DF7BE8600F3FC0A /* RongCloudConstant.h */,
+				2EF894131DF7BE8600F3FC0A /* RongCloudHandler.h */,
+				2EF894141DF7BE8600F3FC0A /* RongCloudHandler.m */,
+				2EF894151DF7BE8600F3FC0A /* RongCloudHybridAdapter.h */,
+				2EF894161DF7BE8600F3FC0A /* RongCloudHybridAdapter.m */,
+				2EF894171DF7BE8600F3FC0A /* RongCloudModel.h */,
+				2EF894181DF7BE8600F3FC0A /* RongCloudModel.m */,
 			);
 			name = UZModules;
 			sourceTree = "<group>";
@@ -140,6 +193,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5286083C1A596B0600587EC2 /* Build configuration list for PBXNativeTarget "RongCloud" */;
 			buildPhases = (
+				A6838D2E1D5D8CC600A7ABB8 /* ShellScript */,
 				528608241A596B0600587EC2 /* Sources */,
 				528608251A596B0600587EC2 /* Frameworks */,
 				528608261A596B0600587EC2 /* Copy Files */,
@@ -174,6 +228,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = 5286081F1A596B0600587EC2;
 			productRefGroup = 528608291A596B0600587EC2 /* Products */;
@@ -197,7 +252,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "tmpName=${PLATFORM_NAME}\nBIN_DIR=\"release\"\n\nAPICLOUD_MODULE_NAME=\"rongCloud2\"\n\n\nrm -rf ${BIN_DIR}/${APICLOUD_MODULE_NAME}\n\nif [ ! -d \"$BIN_DIR\" ]; then\nmkdir -p \"$BIN_DIR\"\nfi\n\nOUTPUT_DIR=\"${BIN_DIR}/${APICLOUD_MODULE_NAME}/target\"\n\nif [ ! -d \"$OUTPUT_DIR\" ]; then\nmkdir -p \"$OUTPUT_DIR\"\nfi\n\n\ncp -af ${BUILT_PRODUCTS_DIR}/lib${TARGET_NAME}.a ${OUTPUT_DIR}/\ncp -af RongCloud/RongCloudLib/ ${OUTPUT_DIR}/\ncp -af RongCloud/uz/module.json ${OUTPUT_DIR}/../";
+			shellScript = "tmpName=${PLATFORM_NAME}\nBIN_DIR=\"release\"\n\n\n\nrm -rf ${BIN_DIR}\nmkdir -p \"$BIN_DIR\"\n\n\nOUTPUT_DIR=\"${BIN_DIR}/target\"\nmkdir -p \"$OUTPUT_DIR\"\n\n\ncp -af ${BUILT_PRODUCTS_DIR}/lib${TARGET_NAME}.a ${OUTPUT_DIR}/\ncp -af RongCloud/RongCloudLib/ ${OUTPUT_DIR}/\ncp -af RongCloud/uz/module.json ${OUTPUT_DIR}/../";
+		};
+		A6838D2E1D5D8CC600A7ABB8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p ./RongCloud/uz\ncp -rf ../development/UZApp/uz/module.json ./RongCloud/uz/\nsed -i '' -e  's/^\\[//g' ./RongCloud/uz/module.json\nsed -i '' -e  's/^\\]//g' ./RongCloud/uz/module.json";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -206,15 +274,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A61647781BE84DB300E90813 /* RongCloudHandler.m in Sources */,
-				A61647821BE84DBC00E90813 /* RongCloudModel.m in Sources */,
-				A61647771BE84DB300E90813 /* RongCloud.m in Sources */,
-				A61647801BE84DBC00E90813 /* RongCloudApplicationHandler.m in Sources */,
-				A61647811BE84DBC00E90813 /* RongCloudHybridAdapter.m in Sources */,
+				2EF8941C1DF7BE8600F3FC0A /* RongCloudHandler.m in Sources */,
+				2EF894191DF7BE8600F3FC0A /* RCDCustomerServiceViewController.m in Sources */,
+				2EF8941A1DF7BE8600F3FC0A /* RongCloud.m in Sources */,
+				2EF8941D1DF7BE8600F3FC0A /* RongCloudHybridAdapter.m in Sources */,
+				2EF8941B1DF7BE8600F3FC0A /* RongCloudApplicationHandler.m in Sources */,
+				2EF8941E1DF7BE8600F3FC0A /* RongCloudModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2EF8945A1DF7BFC100F3FC0A /* RongCloudKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2EF8945B1DF7BFC100F3FC0A /* en */,
+			);
+			name = RongCloudKit.strings;
+			sourceTree = "<group>";
+		};
+		2EF894651DF7BFC100F3FC0A /* RongCloudKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2EF894661DF7BFC100F3FC0A /* zh-Hans */,
+			);
+			name = RongCloudKit.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5286083A1A596B0600587EC2 /* Debug */ = {

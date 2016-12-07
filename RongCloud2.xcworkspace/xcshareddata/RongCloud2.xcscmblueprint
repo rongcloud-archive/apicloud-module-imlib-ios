@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "516160944CA51E3D298BC97FA7CB3F04F8349214",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "516160944CA51E3D298BC97FA7CB3F04F8349214" : 9223372036854775807,
+    "0244FCFE61D8284F4626CE4624D475DC6023C6F3" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "783563D7-DD5A-4870-8951-7EA1ADB683D3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "516160944CA51E3D298BC97FA7CB3F04F8349214" : "apicloud-module-imlib-ios\/",
+    "0244FCFE61D8284F4626CE4624D475DC6023C6F3" : "iOS-Workspace\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "RongCloud2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "RongCloud2.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "gitlab.rongcloud.net:ios-team\/iOS-Workspace.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0244FCFE61D8284F4626CE4624D475DC6023C6F3"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/rongcloud\/apicloud-module-imlib-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "516160944CA51E3D298BC97FA7CB3F04F8349214"
+    }
+  ]
+}

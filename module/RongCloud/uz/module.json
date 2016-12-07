@@ -17,10 +17,8 @@
             "createDiscussion", "getDiscussion", "setDiscussionName", "addMemberToDiscussion",
             "removeMemberFromDiscussion", "quitDiscussion", "setDiscussionInviteStatus",
             "syncGroup", "joinGroup", "quitGroup",
-            "joinChatRoom", "quitChatRoom", "getConnectionStatus", "logout", "getRemoteHistoryMessages", 
-            "setMessageSentStatus", "getCurrentUserId", "addToBlacklist", "removeFromBlacklist", 
-            "getBlacklistStatus", "getBlacklist", "setNotificationQuietHours", "removeNotificationQuietHours", 
-            "getNotificationQuietHours"
+            "joinChatRoom", "quitChatRoom", "getConnectionStatus", "getRemoteHistoryMessages", "setMessageSentStatus", "getCurrentUserId", "addToBlacklist", "removeFromBlacklist", "getBlacklistStatus", "getBlacklist", "setNotificationQuietHours", "removeNotificationQuietHours", "getNotificationQuietHours", "sendCommandMessage", "disableLocalNotification", "startNativeSingleCall", "startNativeMultiCall", "startNativeCustomerService", "setUserInfoProvider", "refreshUserInfo", "startCustomerService", "stopCustomerService", "selectCustomerServiceGroup", "switchToHumanMode", "evaluateRobotCustomerService", "evaluateHumanCustomerService"
             ],
  "launchClassMethod":"launch"
 }
+

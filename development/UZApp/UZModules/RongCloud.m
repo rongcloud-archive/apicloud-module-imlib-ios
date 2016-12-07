@@ -127,7 +127,11 @@
 }
 
 - (void)onConnectionStatusChanged:(RCConnectionStatus)status {
-    [self.rongCloudAdapter onConnectionStatusChanged:status];
+#ifdef RC_SUPPORT_IMKIT
+  [self.rongCloudAdapter onRCIMConnectionStatusChanged:status];
+#else
+  [self.rongCloudAdapter onConnectionStatusChanged:status];
+#endif
 }
 
 
@@ -247,7 +251,20 @@
         [self.rongCloudAdapter sendCommandNotificationMessage:_conversationTypeString targetId:_targetId name:_name data:_data callbackId:cbId];
     }
 }
-
+-(void)sendCommandMessage : (NSDictionary *)paramDict
+{
+    NSLog(@"%s", __FUNCTION__);
+    NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+    
+    if (cbId) {
+        NSString * _conversationTypeString = [paramDict objectForKey:@"conversationType"];
+        NSString *_targetId                = [paramDict objectForKey:@"targetId"];
+        NSString *_name                    = [paramDict objectForKey:@"name"];
+        NSString *_data                    = [paramDict objectForKey:@"data"];
+        
+        [self.rongCloudAdapter sendCommandMessage:_conversationTypeString targetId:_targetId name:_name data:_data callbackId:cbId];
+    }
+}
 - (void)setOnReceiveMessageListener:(NSDictionary *)paramDict
 {
     NSLog(@"%s", __FUNCTION__);
@@ -259,7 +276,11 @@
 
 
 - (void)onReceived:(RCMessage *)message left:(int)nLeft object:(id)object {
-    [self.rongCloudAdapter onReceived:message left:nLeft object:object];
+#ifdef RC_SUPPORT_IMKIT
+  [self.rongCloudAdapter onRCIMReceiveMessage:message left:nLeft];
+#else
+  [self.rongCloudAdapter onReceived:message left:nLeft object:object];
+#endif
 }
 
 /**
@@ -491,7 +512,7 @@
         NSNumber *__messageId =[paramDict objectForKey:@"messageId"];
         NSString *__receivedStatus = [paramDict objectForKey:@"receivedStatus"];
         
-        [self.rongCloudAdapter setMessageSentStatus:__messageId sentStatus:__receivedStatus withCallBackId:cbId];
+        [self.rongCloudAdapter setMessageReceivedStatus:__messageId withReceivedStatus:__receivedStatus withCallBackId:cbId];
     }
 }
 
@@ -849,4 +870,129 @@
         [self.rongCloudAdapter getNotificationQuietHours:cbId];
     }
 }
+- (void)disableLocalNotification:(NSDictionary *)paramDict {
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+    
+    if (cbId) {
+        [self.rongCloudAdapter disableLocalNotification:cbId];
+    }
+}
+
+- (void)startCustomerService:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSString *userName = [paramDict objectForKey:@"userName"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter startCustomerService:kefuId userName:userName withCallbackId:cbId];
+  }
+}
+
+- (void)stopCustomerService:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter stopCustomerService:kefuId withCallbackId:cbId];
+  }
+}
+
+- (void)selectCustomerServiceGroup:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSString *groupId = [paramDict objectForKey:@"groupId"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter selectCustomerServiceGroup:kefuId withGroupId:groupId withCallbackId:cbId];
+  }
+}
+- (void)switchToHumanMode:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter switchToHumanMode:kefuId withCallbackId:cbId];
+  }
+}
+
+- (void)evaluateRobotCustomerService:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSString *knownledgeId = [paramDict objectForKey:@"knownledgeId"];
+    NSNumber *resolved = [paramDict objectForKey:@"isRobotResolved"];
+    NSString *suggest = [paramDict objectForKey:@"suggest"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter evaluateCustomerService:kefuId knownledgeId:knownledgeId robotValue:[resolved boolValue] suggest:suggest withCallbackId:cbId];
+  }
+}
+
+- (void)evaluateHumanCustomerService:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSString *dialogId = [paramDict objectForKey:@"dialogId"];
+  NSNumber *value = [paramDict objectForKey:@"value"];
+  NSString *suggest = [paramDict objectForKey:@"suggest"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter evaluateCustomerService:kefuId dialogId:dialogId humanValue:[value intValue] suggest:suggest withCallbackId:cbId];
+  }
+}
+
+#ifdef RC_SUPPORT_IMKIT
+- (void)startNativeSingleCall:(NSDictionary *)paramDict {
+  NSString *calleeId = [paramDict objectForKey:@"calleeId"];
+  NSNumber *mediaType = [paramDict objectForKey:@"mediaType"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter startNativeSingleCall:calleeId mediaType:[mediaType intValue] withCallBackId:cbId];
+  }
+}
+- (void)startNativeMultiCall:(NSDictionary *)paramDict {
+  NSString *conversationTypeString = [paramDict objectForKey:@"conversationType"];
+  NSString *targetId = [paramDict objectForKey:@"targetId"];
+  NSArray *userIdList = [paramDict mutableArrayValueForKey:@"userIdList"];
+  NSNumber *mediaType = [paramDict objectForKey:@"mediaType"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+
+  if (cbId) {
+    [self.rongCloudAdapter startNativeMultiCall:conversationTypeString targetId:targetId userIdList:userIdList mediaType:[mediaType intValue] withCallBackId:cbId];
+  }
+}
+
+- (void)startNativeCustomerService:(NSDictionary *)paramDict {
+  NSString *kefuId = [paramDict objectForKey:@"kefuId"];
+  NSString *userName = [paramDict objectForKey:@"userName"];
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter startNativeCustomerService:kefuId withUserName:userName withCallbackId:cbId];
+  }
+}
+
+- (void)refreshUserInfo:(NSDictionary *)paramDict {
+  NSString *userId = [paramDict objectForKey:@"userId"];
+  NSString *name = [paramDict objectForKey:@"name"];
+  NSString *portraitUri = [paramDict objectForKey:@"portraitUri"];
+    NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    RCUserInfo *userInfo = [[RCUserInfo alloc] initWithUserId:userId name:name portrait:portraitUri];
+    [self.rongCloudAdapter refreshUserInfo:userInfo];
+  }
+}
+
+- (void)setUserInfoProvider:(NSDictionary *)paramDict {
+  NSLog(@"%s", __FUNCTION__);
+  
+  NSNumber *cbId = [paramDict objectForKey:@"cbId"];
+  
+  if (cbId) {
+    [self.rongCloudAdapter setUserInfoProvider:cbId];
+  }
+}
+#endif
 @end
