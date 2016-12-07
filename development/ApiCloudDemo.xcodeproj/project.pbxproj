@@ -23,7 +23,6 @@
 		2EF894981DF7C13600F3FC0A /* RongCloud.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2EF8948A1DF7C13600F3FC0A /* RongCloud.bundle */; };
 		2EF894991DF7C13600F3FC0A /* RongIMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF8948B1DF7C13600F3FC0A /* RongIMKit.framework */; };
 		2EF8949A1DF7C13600F3FC0A /* RongIMLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF8948C1DF7C13600F3FC0A /* RongIMLib.framework */; };
-		2EF8949B1DF7C13600F3FC0A /* RongRTCEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EF8948D1DF7C13600F3FC0A /* RongRTCEngine.framework */; };
 		2EF8949C1DF7C13600F3FC0A /* RongCloudKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2EF8948F1DF7C13600F3FC0A /* RongCloudKit.strings */; };
 		527BCF7119C431480077631F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 527BCF7019C431480077631F /* main.m */; };
 		527BCF7419C431480077631F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 527BCF7319C431480077631F /* AppDelegate.m */; };
@@ -88,7 +87,6 @@
 		2EF8948A1DF7C13600F3FC0A /* RongCloud.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = RongCloud.bundle; path = UZApp/RongCloudLib/RongCloud.bundle; sourceTree = "<group>"; };
 		2EF8948B1DF7C13600F3FC0A /* RongIMKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongIMKit.framework; path = UZApp/RongCloudLib/RongIMKit.framework; sourceTree = "<group>"; };
 		2EF8948C1DF7C13600F3FC0A /* RongIMLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongIMLib.framework; path = UZApp/RongCloudLib/RongIMLib.framework; sourceTree = "<group>"; };
-		2EF8948D1DF7C13600F3FC0A /* RongRTCEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongRTCEngine.framework; path = UZApp/RongCloudLib/RongRTCEngine.framework; sourceTree = "<group>"; };
 		2EF894901DF7C13600F3FC0A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = RongCloudKit.strings; sourceTree = "<group>"; };
 		5258E3F719D442CB000EE496 /* UZAppUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UZAppUtils.h; sourceTree = "<group>"; };
 		5258E3F819D442CB000EE496 /* UZModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UZModule.h; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 				527BCFBE19C434100077631F /* libz.dylib in Frameworks */,
 				527BCFBF19C434100077631F /* libz.1.2.5.dylib in Frameworks */,
 				2EF894941DF7C13600F3FC0A /* libopencore-amrnb.a in Frameworks */,
-				2EF8949B1DF7C13600F3FC0A /* RongRTCEngine.framework in Frameworks */,
 				527BCFC019C434100077631F /* libsqlite3.dylib in Frameworks */,
 				527BCFC119C434100077631F /* CoreLocation.framework in Frameworks */,
 				2EF894911DF7C13600F3FC0A /* AgoraRtcEngineKit.framework in Frameworks */,
@@ -272,7 +269,6 @@
 				2EF8948A1DF7C13600F3FC0A /* RongCloud.bundle */,
 				2EF8948B1DF7C13600F3FC0A /* RongIMKit.framework */,
 				2EF8948C1DF7C13600F3FC0A /* RongIMLib.framework */,
-				2EF8948D1DF7C13600F3FC0A /* RongRTCEngine.framework */,
 				2EF8948E1DF7C13600F3FC0A /* zh-Hans.lproj */,
 				A6B861DA1D4F1CF7005B4945 /* VideoToolbox.framework */,
 				527BCF9E19C4340F0077631F /* libicucore.dylib */,
